@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Home Servico Hospitalar</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- MENU -->
+  <nav>
+    <button onclick="mostrarTela('cadastro')">Cadastro</button>
+    <button onclick="mostrarTela('lista')">Lista</button>
+    <button onclick="mostrarTela('telemetria')">Telemetria</button>
+  </nav>
+
+  <!-- ================= CADASTRO ================= -->
+  <section id="telaCadastro">
+
+    <h2>Cadastrar Missão</h2>
+
+    <form id="formMissao">
+
+      <input type="text" id="origem" placeholder="Origem" required><br><br>
+
+      <input type="text" id="destino" placeholder="Destino" required><br><br>
+
+      <select id="tipo">
+        <option value="medicamento">Medicamento</option>
+        <option value="amostra">Amostra</option>
+        <option value="material">Material</option>
+      </select><br><br>
+
+      <select id="prioridade">
+        <option value="1">Prioridade 1</option>
+        <option value="2">Prioridade 2</option>
+        <option value="3">Prioridade 3</option>
+      </select><br><br>
+
+      <input type="number" id="distancia" placeholder="Distância (m)" required><br><br>
+
+      <button type="submit">Cadastrar</button><br><br>
+
+    </form>
+
+  </section>
+
+  <!-- ================= LISTA ================= -->
+  <section id="telaLista" style="display:none;">
+
+    <h2>Lista de Missões</h2>
+
+    <!-- FILTRO -->
+    <select id="filtroStatus">
+      <option value="todas">Todas</option>
+      <option value="pendente">Pendentes</option>
+      <option value="em_execucao">Em execução</option>
+      <option value="concluida">Concluídas</option>
+      <option value="cancelada">Canceladas</option>
+      <option value="falha">Falhas</option>
+    </select>
+
+    <!-- LISTA -->
+    <div id="listaMissoes"></div>
+
+  </section>
+
+  <!-- ================= TELEMETRIA ================= -->
+  <section id="telaTelemetria" style="display:none;">
+
+    <h2>Telemetria do Robô</h2>
+
+    <p>Bateria: <span id="bateria">--</span>%</p>
+    <p>Latência: <span id="latencia">--</span> ms</p>
+    <p>Status: <span id="statusRobot">--</span></p>
+    <p>Missão atual: <span id="missaoAtual">--</span></p>
+    <p>Última atualização: <span id="horaAtualizacao">--</span></p>
+
+    <!-- ALERTAS -->
+    <div id="alertas"></div>
+
+  </section>
+
+  <script src="script.js"></script>
+
+</body>
+</html>
+
