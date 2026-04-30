@@ -5,6 +5,13 @@ const transicoes = {
   falha: ["pendente"]
 };
 
+let robo = {
+  bateria: 100,
+  latencia: 0,
+  status: "livre",
+  missaoAtual: null
+};
+
 // NAVEGAÇÃO ENTRE TELAS
 function mostrarTela(tela) {
   document.getElementById("telaCadastro").style.display = "none";
@@ -195,7 +202,43 @@ function alterarStatus(id, novoStatus) {
 
 }
 
-window.onload = function() {
-  mostrarTela("lista");
-};
+function atualizarTelemetria() {
+  robo.bateria -= Math.random() * 2;
+  if (robo.bateria < 0) robo.bateria = 0;
+
+  robo.latencia = Math.floor(Math.random() * 200);
+
+  const emExecucao = missoes.find(m => m.status === "em_execucao");
+
+  robo.missaoAtual = emExecucao ? emExecucao.id : "Nenhuma";
+  robo.status = emExecucao ? "ocupado" : "livre";
+
+  document.getElementById("bateria").textContent = robo.bateria.toFixed(1);
+  document.getElementById("latencia").textContent = robo.latencia;
+  document.getElementById("statusRobot").textContent = robo.status;
+  document.getElementById("missaoAtual").textContent = robo.missaoAtual;
+  document.getElementById("horaAtualizacao").textContent = new Date().toLocaleTimeString();
+
+  const divAlertas = document.getElementById("alertas");
+  divAlertas.innerHTML = "";
+
+  if (robo.bateria < 20) {
+  divAlertas.innerHTML += "<p>⚠️ Bateria baixa!</p>";
+  }
+
+  if (robo.latencia > 100) {
+  divAlertas.innerHTML += "<p>⚠️ Latência alta!</p>";
+  }
+
+  const falha = missoes.find(m => m.status === "falha");
+
+  if (falha) {
+    divAlertas.innerHTML += `<p>❌ Missão ${falha.id} falhou!</p>`;
+  }
+
+  
+}
+
+setInterval(atualizarTelemetria, 2000);
+
 
