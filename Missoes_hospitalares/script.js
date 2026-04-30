@@ -1,6 +1,11 @@
-// =============================
+//modelo de navegacao de status
+const transicoes = {
+  pendente: ["em_execucao", "cancelada"],
+  em_execucao: ["concluida", "falha"],
+  falha: ["pendente"]
+};
+
 // NAVEGAÇÃO ENTRE TELAS
-// =============================
 function mostrarTela(tela) {
   document.getElementById("telaCadastro").style.display = "none";
   document.getElementById("telaLista").style.display = "none";
@@ -65,10 +70,39 @@ let missoes = [
 // =============================
 function renderizarMissoes(lista = missoes) {
   const container = document.getElementById("listaMissoes");
+  
   container.innerHTML = "";
+
+  //definir ordem de missões 
+  lista.sort((a, b) => {
+    if (b.prioridade !== a.prioridade) {
+      return b.prioridade - a.prioridade;
+    }
+
+    return a.distancia - b.distancia;
+  });
 
   lista.forEach(m => {
     const div = document.createElement("div");
+    let botoes = "";
+    
+    if (m.status === "pendente") {
+    botoes += `<button onclick="alterarStatus(${m.id}, 'em_execucao')">Iniciar</button>`;
+    botoes += `<button onclick="alterarStatus(${m.id}, 'cancelada')">Cancelar</button>`;
+    }
+
+    if (m.status === "em_execucao") {
+      botoes += `<button onclick="alterarStatus(${m.id}, 'concluida')">Concluir</button>`;
+      botoes += `<button onclick="alterarStatus(${m.id}, 'falha')">Falha</button>`;
+    }
+
+    if (m.status === "falha") {
+      botoes += `<button onclick="alterarStatus(${m.id}, 'pendente')">Reagendar</button>`;
+    }
+
+    if (m.status === "concluida" || m.status === "cancelada") {
+    botoes += `<p><em>Sem ações disponíveis</em></p>`;
+    }
 
     div.innerHTML = `
       <hr>
@@ -79,16 +113,15 @@ function renderizarMissoes(lista = missoes) {
       <p>Prioridade: ${m.prioridade}</p>
       <p>Distância: ${m.distancia}m</p>
       <p>Status: ${m.status}</p>
+
+      ${botoes}
     `;
 
     container.appendChild(div);
   });
 }
 
-
-// =============================
 // CADASTRAR NOVA MISSÃO
-// =============================
 document.getElementById("formMissao").addEventListener("submit", function(e) {
   e.preventDefault();
 
@@ -139,4 +172,30 @@ document.getElementById("filtroStatus").addEventListener("change", function() {
   const listaFiltrada = filtrarStatus();
   renderizarMissoes(listaFiltrada);
 });
+
+//alterar status da missao
+function alterarStatus(id, novoStatus) {
+  const missao = missoes.find(m => m.id === id);
+
+  if (!missao) {
+  alert("Missão não encontrada");
+  return;
+  }
+
+  const permitidos = transicoes[missao.status] || [];
+  if (!permitidos.includes(novoStatus)) {
+  alert("Transição inválida!");
+  return;
+  }
+
+  missao.status = novoStatus;
+
+  const listaFiltrada = filtrarStatus();
+  renderizarMissoes(listaFiltrada);
+
+}
+
+window.onload = function() {
+  mostrarTela("lista");
+};
 
