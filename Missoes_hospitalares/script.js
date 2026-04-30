@@ -200,6 +200,9 @@ function alterarStatus(id, novoStatus) {
   const listaFiltrada = filtrarStatus();
   renderizarMissoes(listaFiltrada);
 
+  missao.status = novoStatus;
+  enviarStatus(missao);
+  salvarMissoes?.();
 }
 
 function atualizarTelemetria() {
@@ -235,8 +238,17 @@ function atualizarTelemetria() {
   if (falha) {
     divAlertas.innerHTML += `<p>❌ Missão ${falha.id} falhou!</p>`;
   }
-
   
+}
+
+function enviarStatus(missao) {
+  const json = {
+    missao: missao.id,
+    status: missao.status
+  };
+
+  document.getElementById("jsonSaida").textContent =
+  JSON.stringify(json, null, 2);
 }
 
 setInterval(atualizarTelemetria, 2000);
