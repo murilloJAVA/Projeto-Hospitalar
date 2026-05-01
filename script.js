@@ -34,10 +34,7 @@ function mostrarTela(tela) {
   }
 }
 
-
-// =============================
 // "BANCO DE DADOS" (ARRAY)
-// =============================
 let missoes = [
   {
     id: 101,
@@ -72,9 +69,7 @@ let missoes = [
     let proximoId = 104;
 
 
-// =============================
 // RENDERIZAR MISSÕES NA TELA
-// =============================
 function renderizarMissoes(lista = missoes) {
   const container = document.getElementById("listaMissoes");
   
@@ -205,6 +200,7 @@ function alterarStatus(id, novoStatus) {
   salvarMissoes?.();
 }
 
+//TELEMETRIA
 function atualizarTelemetria() {
   robo.bateria -= Math.random() * 2;
   if (robo.bateria < 0) robo.bateria = 0;
@@ -222,6 +218,7 @@ function atualizarTelemetria() {
   document.getElementById("missaoAtual").textContent = robo.missaoAtual;
   document.getElementById("horaAtualizacao").textContent = new Date().toLocaleTimeString();
 
+  //ALERTAS DA TELEMETRIA
   const divAlertas = document.getElementById("alertas");
   divAlertas.innerHTML = "";
 
@@ -247,6 +244,7 @@ function enviarStatus(missao) {
     status: missao.status
   };
 
+  //Formatacao
   document.getElementById("jsonSaida").textContent =
   JSON.stringify(json, null, 2);
 }
